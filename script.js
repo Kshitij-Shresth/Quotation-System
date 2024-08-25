@@ -14,13 +14,12 @@ function calculateQuotation() {
     };
 
     let totalCost = 0;
-
     document.querySelectorAll('input[name="projectType"]:checked').forEach((checkbox) => {
         totalCost += baseCosts[checkbox.value];
     });
 
     if (document.querySelector('input[name="clientType"]:checked').value === 'company') {
-        totalCost *= 1.30;
+        totalCost *= 1.20;
     }
 
     if (document.querySelector('input[name="deadline"]:checked').value === 'tight') {
@@ -52,23 +51,35 @@ function printInvoice() {
     };
 
     const checkedTypes = document.querySelectorAll('input[name="projectType"]:checked');
+
+    const clientType = document.querySelector('input[name="clientType"]:checked').value;
+    const isCompany = clientType === "company";
+    const ndaSelected = document.getElementById('nda').checked;
+
+    let invoiceContent = "Service        Deadline       LTE Discount    Consultancy     NDA\n";
+    invoiceContent += "---------------------------------------------------------------------\n";
     
-    let invoiceContent = "Project Type\tDeadline (15% of Base Cost)\tLTE Discount\n";
     let totalCost = 0;
 
     checkedTypes.forEach((checkbox) => {
         const projectType = checkbox.value;
-        const baseCost = baseCosts[projectType];
-        
+        let baseCost = baseCosts[projectType];
+
+        const consultancyCost = isCompany ? (baseCost * 0.30).toFixed(2) : "n/a";
+
         const deadlineCost = document.querySelector('input[name="deadline"]:checked').value === 'tight' ? (baseCost * 0.15).toFixed(2) : 'n/a';
-        
+
         const lteDiscount = document.getElementById('lteDiscount').checked ? (baseCost * 0.15).toFixed(2) : 'n/a';
         
+
+        const ndaCost = ndaSelected ? (baseCost * 0.05).toFixed(2) : 'n/a';
+        
+
         totalCost += baseCost;
 
-        invoiceContent += `${projectType}\t${deadlineCost}\t${lteDiscount}\n`;
+        invoiceContent += `${projectType.padEnd(16)} ${deadlineCost.padEnd(14)} ${lteDiscount.padEnd(14)} ${consultancyCost.padEnd(16)} ${ndaCost.padEnd(10)}\n`;
     });
-   
+
     const upfrontPayment = (totalCost * 0.40).toFixed(2);
     const firstMilestone = (totalCost * 0.10).toFixed(2);
     const secondMilestone = (totalCost * 0.25).toFixed(2);
@@ -80,6 +91,7 @@ function printInvoice() {
     invoiceContent += `10% upon completion of the first milestone: $${firstMilestone}\n`;
     invoiceContent += `25% upon completion of the second milestone: $${secondMilestone}\n`;
     invoiceContent += `25% upon final delivery and client approval: $${finalPayment}\n`;
+
     const blob = new Blob([invoiceContent], { type: 'text/plain' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
