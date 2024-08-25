@@ -51,10 +51,11 @@ function printInvoice() {
     };
 
     const checkedTypes = document.querySelectorAll('input[name="projectType"]:checked');
-
     const clientType = document.querySelector('input[name="clientType"]:checked').value;
     const isCompany = clientType === "company";
     const ndaSelected = document.getElementById('nda').checked;
+    const deadline = document.querySelector('input[name="deadline"]:checked').value;
+    const lteDiscount = document.getElementById('lteDiscount').checked;
 
     let invoiceContent = "Service        Deadline       LTE Discount    Consultancy     NDA\n";
     invoiceContent += "---------------------------------------------------------------------\n";
@@ -64,21 +65,20 @@ function printInvoice() {
     checkedTypes.forEach((checkbox) => {
         const projectType = checkbox.value;
         let baseCost = baseCosts[projectType];
-
-        const consultancyCost = isCompany ? (baseCost * 0.30).toFixed(2) : "n/a";
-
-        const deadlineCost = document.querySelector('input[name="deadline"]:checked').value === 'tight' ? (baseCost * 0.15).toFixed(2) : 'n/a';
-
-        const lteDiscount = document.getElementById('lteDiscount').checked ? (baseCost * 0.15).toFixed(2) : 'n/a';
-        
-
-        const ndaCost = ndaSelected ? (baseCost * 0.05).toFixed(2) : 'n/a';
-        
-
         totalCost += baseCost;
 
-        invoiceContent += `${projectType.padEnd(16)} ${deadlineCost.padEnd(14)} ${lteDiscount.padEnd(14)} ${consultancyCost.padEnd(16)} ${ndaCost.padEnd(10)}\n`;
+        const consultancyCost = isCompany ? (baseCost * 0.30).toFixed(2) : "n/a";
+        const deadlineCost = deadline === 'tight' ? (baseCost * 0.15).toFixed(2) : 'n/a';
+        const lteDiscountAmount = lteDiscount ? (baseCost * 0.15).toFixed(2) : 'n/a';
+        const ndaCost = ndaSelected ? (baseCost * 0.05).toFixed(2) : 'n/a';
+
+        invoiceContent += `${projectType.padEnd(16)} ${deadlineCost.padEnd(14)} ${lteDiscountAmount.padEnd(14)} ${consultancyCost.padEnd(16)} ${ndaCost.padEnd(10)}\n`;
     });
+
+    if (isCompany) totalCost *= 1.30;
+    if (deadline === 'tight') totalCost *= 1.15;
+    if (ndaSelected) totalCost *= 1.05;
+    if (lteDiscount) totalCost *= 0.85;
 
     const upfrontPayment = (totalCost * 0.40).toFixed(2);
     const firstMilestone = (totalCost * 0.10).toFixed(2);
@@ -100,4 +100,3 @@ function printInvoice() {
     link.click();
     document.body.removeChild(link);
 }
-
