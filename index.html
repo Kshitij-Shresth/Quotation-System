@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Quotation System</h1>
+        <form id="quotation-form">
+            <fieldset>
+                <legend>Project Type</legend>
+                <label><input type="checkbox" name="projectType" value="frontend"> Frontend - $125</label> 
+                <label><input type="checkbox" name="projectType" value="backend"> Backend - $350</label>
+                <label><input type="checkbox" name="projectType" value="api"> API/3rd Party - $100</label>
+                <label><input type="checkbox" name="projectType" value="ai"> AI LLM - $2500</label>
+                <label><input type="checkbox" name="projectType" value="ml"> Machine Learning - $150</label>
+                <label><input type="checkbox" name="projectType" value="bot"> Bot - $100</label>
+                <label><input type="checkbox" name="projectType" value="design"> Design Template - $30</label>
+                <label><input type="checkbox" name="projectType" value="documentary"> Documentary - $50</label>
+                <label><input type="checkbox" name="projectType" value="maintenanceMonthly"> Maintenance (Monthly) - $25</label>
+                <label><input type="checkbox" name="projectType" value="maintenanceYearly"> Maintenance (Yearly) - $200</label>
+                <label><input type="checkbox" name="projectType" value="hosting"> Hosting - $100</label>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Additional Options</legend>
+                <label><input type="checkbox" id="nda" name="nda"> NDA (+5%)</label>
+                <label><input type="checkbox" id="lteDiscount" name="lteDiscount"> LTE Discount (-15%)</label>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Client Type</legend>
+                <label><input type="radio" name="clientType" value="individual" checked> Individual</label>
+                <label><input type="radio" name="clientType" value="company"> Company (+30%)</label>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Deadline</legend>
+                <label><input type="radio" name="deadline" value="normal" checked> Normal</label>
+                <label><input type="radio" name="deadline" value="tight"> Tight (+15%)</label>
+            </fieldset>
+
+            <button type="button" onclick="calculateQuotation()">Get Quotation</button>
+        </form>
+
+        <div id="result">
+            <h2>Final Cost: $<span id="finalCost">0.00</span></h2>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
